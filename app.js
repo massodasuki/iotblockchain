@@ -9,6 +9,7 @@ var nodeCron = require('./scalabledriverprocess/cron');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/loadbalancing');
 var benchmarkRouter = require('./routes/benchmark');
+var formbenchmarkRouter = require('./routes/formbenchmark');
 var loadbalancingRouter = require('./routes/loadbalancing');
 var scalabledriverRouter = require('./routes/scalabledriver');
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/benchmark', benchmarkRouter);
+app.use('/formbenchmark', formbenchmarkRouter);
 app.use('/loadbalancing', loadbalancingRouter);
 app.use('/scalabledriver', scalabledriverRouter);
 

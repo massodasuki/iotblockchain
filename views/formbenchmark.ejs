@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>BigchainDB boilerplate</title>
+        <!-- Adjust version to your needs -->
+        <script src="https://unpkg.com/bigchaindb-driver@4.0.0/dist/browser/bigchaindb-driver.window.min.js"></script>
+
+        <script>
+
+        function submit() { 
+
+            var vaRage = document.getElementById('age').value;
+			var vaRsex = document.getElementById('sex').value;
+			var vaRbmi = document.getElementById('bmi').value;
+			var vaRchildren = document.getElementById('children').value;
+			var vaRsmoker = document.getElementById('smoker').value;
+			var vaRregion = document.getElementById('region').value;
+			var vaRcharge = document.getElementById('charge').value;
+            // BigchainDB server instance (e.g. https://example.com/api/v1/)
+            const API_PATH = 'http://localhost:9984/api/v1/'
+
+            // Create a new keypair.
+            const alice = new BigchainDB.Ed25519Keypair()
+
+            // Construct a transaction payload
+            const tx = BigchainDB.Transaction.makeCreateTransaction(
+                // Define the asset to store, in this example it is the current temperature
+                // (in Celsius) for the city of Berlin.
+                { age: vaRage.toString(),
+				  sex: vaRsex.toString(),
+				  bmi: vaRbmi.toString(),
+				  children: vaRchildren.toString(),
+				  smoker: vaRsmoker.toString(),
+				  region: vaRregion.toString(),
+				  charge: vaRcharge.toString()
+				//datetime: new Date().toString()
+				},
+
+                // Metadata contains information about the transaction itself
+                // (can be `null` if not needed)
+                { what: 'My first BigchainDB transaction' },
+
+                // A transaction needs an output
+                [ BigchainDB.Transaction.makeOutput(
+                        BigchainDB.Transaction.makeEd25519Condition(alice.publicKey))
+                ],
+                alice.publicKey
+            )
+
+            // Sign the transaction with private keys
+            const txSigned = BigchainDB.Transaction.signTransaction(tx, alice.privateKey)
+
+            // Send the transaction off to BigchainDB
+            let conn = new BigchainDB.Connection(API_PATH)
+
+            conn.postTransactionCommit(txSigned)
+                .then(res => {
+                    const elem = document.getElementById('lastTransaction')
+                    elem.href = API_PATH + 'transactions/' + txSigned.id
+                    elem.innerText = txSigned.id
+                    console.log('Transaction', txSigned.id, 'accepted')
+                })
+            // Check console for the transaction's status
+        }
+        </script>
+    </head>
+    <body id="home">
+
+    <h2>BichainDB Javascript Driver GUI : Server 1</h2>
+    
+    <form action="/direct" method="post"  id="form_id">
+        <table>
+            <tr>
+                <th>Categories</th>
+                <th>Input</th>
+            </tr>
+            <tr>
+                <td>Age :</td>
+                <td>
+                    <input type="text" id="age" name="age" value="">
+                </td>
+            </tr>
+            <tr>
+                <td>Sex:</td>
+                <td>
+                    <input type="text" id="sex" name="sex" value="">
+                </td>
+    
+            </tr>
+            <tr>
+                <td>Bmi</td>
+                <td>
+                    <input type="text" id="bmi" name="bmi" value="">
+                </td>
+    
+            </tr>
+            <tr>
+                <td>Children:</td>
+                <td>
+                    <input type="text" id="children" name="children" value="">
+                </td>
+    
+            </tr>
+            <tr>
+                <td>Smoker:</td>
+                <td>
+                    <input type="text" id="smoker" name="smoker" value="">
+                </td>
+    
+            </tr>
+            <tr>
+                <td>Region:</td>
+                <td>
+                    <input type="text" id="region" name="region" value="">
+                </td>
+    
+            </tr>
+            <tr>
+                <td>Charges:</td>
+                <td>
+                    <input type="text" id="charge" name="charge" value="">
+                </td>
+    
+            </tr>
+    
+        </table>
+        <input type="submit" value="Submit">
+      </form>
+      
+    <button onclick="submit()">Submit</button>
+            <p> Your transaction id is: <a id="lastTransaction" target="_blank"><em>processing</em></a></p>    
+        </body>
+    </html>
