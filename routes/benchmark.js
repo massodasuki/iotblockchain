@@ -63,7 +63,7 @@ router.post('/', function(req, res, next) {
 
     // Send the transaction off to BigchainDB
     const conn = new driver.Connection(API_PATH)
-
+    console.log(txSigned);
     conn.postTransactionCommit(txSigned)
     .then(retrievedTx => console.log('Transaction', retrievedTx.id, 'successfully posted.'))
 
