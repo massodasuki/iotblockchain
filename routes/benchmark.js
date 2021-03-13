@@ -36,27 +36,27 @@ const tx = driver.Transaction.makeCreateTransaction(
 const txSigned = driver.Transaction.signTransaction(tx, alice.privateKey)
 
 // Or use delegateSignTransaction to provide your own signature function
-function signTransaction() {
-    // get privateKey from somewhere
-    const privateKeyBuffer = Buffer.from(base58.decode(alice.privateKey))
-    return function sign(serializedTransaction, input, index) {
-        const transactionUniqueFulfillment = input.fulfills ? serializedTransaction
-                .concat(input.fulfills.transaction_id)
-                .concat(input.fulfills.output_index) : serializedTransaction
-        const transactionHash = crypto.createHash('sha3-256').update(transactionUniqueFulfillment).digest()
-        const ed25519Fulfillment = new Ed25519Sha256();
-        ed25519Fulfillment.sign(transactionHash, privateKeyBuffer);
-        return ed25519Fulfillment.serializeUri();
-    };
-}
-const txSigned = driver.Transaction.delegateSignTransaction(tx, signTransaction())
+// function signTransaction() {
+//     // get privateKey from somewhere
+//     const privateKeyBuffer = Buffer.from(base58.decode(alice.privateKey))
+//     return function sign(serializedTransaction, input, index) {
+//         const transactionUniqueFulfillment = input.fulfills ? serializedTransaction
+//                 .concat(input.fulfills.transaction_id)
+//                 .concat(input.fulfills.output_index) : serializedTransaction
+//         const transactionHash = crypto.createHash('sha3-256').update(transactionUniqueFulfillment).digest()
+//         const ed25519Fulfillment = new Ed25519Sha256();
+//         ed25519Fulfillment.sign(transactionHash, privateKeyBuffer);
+//         return ed25519Fulfillment.serializeUri();
+//     };
+// }
+// const txSigned = driver.Transaction.delegateSignTransaction(tx, signTransaction())
 
 // Send the transaction off to BigchainDB
 const conn = new driver.Connection(API_PATH)
 
 conn.postTransactionCommit(txSigned)
     .then(retrievedTx => console.log('Transaction', retrievedTx.id, 'successfully posted.'))
-    
+
     res.render('benchmark', { title: 'Express' });
 });
 
