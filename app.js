@@ -12,6 +12,7 @@ var benchmarkRouter = require('./routes/benchmark');
 var formbenchmarkRouter = require('./routes/formbenchmark');
 var loadbalancingRouter = require('./routes/loadbalancing');
 var scalabledriverRouter = require('./routes/scalabledriver');
+var mongoRouter = require('./routes/mongo');
 
 
 var app = express();
@@ -32,6 +33,7 @@ app.use('/benchmark', benchmarkRouter);
 app.use('/formbenchmark', formbenchmarkRouter);
 app.use('/loadbalancing', loadbalancingRouter);
 app.use('/scalabledriver', scalabledriverRouter);
+app.use('/mongo', mongoRouter);
 
 
 nodeCron.startScalableDriver();
