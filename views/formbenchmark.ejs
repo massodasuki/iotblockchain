@@ -63,7 +63,7 @@
                     const elem = document.getElementById('lastTransaction')
                     elem.href = API_PATH + 'transactions/' + txSigned.id
                     elem.innerText = txSigned.id
-                    console.log('Transaction', txSigned.id, 'accepted')
+                    alert('Transaction', txSigned.id, 'accepted')
                 })
             // Check console for the transaction's status
         }
