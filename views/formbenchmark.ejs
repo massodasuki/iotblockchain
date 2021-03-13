@@ -20,13 +20,13 @@
 			var vaRregion = document.getElementById('region').value;
 			var vaRcharge = document.getElementById('charge').value;
 
-            alert(vaRcharge);
+            alert("line 23");
             // BigchainDB server instance (e.g. https://example.com/api/v1/)
             const API_PATH = 'http://localhost:9984/api/v1/'
-
+            alert("line 26");
             // Create a new keypair.
             const alice = new BigchainDB.Ed25519Keypair()
-
+            alert("line 29");
             // Construct a transaction payload
             const tx = BigchainDB.Transaction.makeCreateTransaction(
                 // Define the asset to store, in this example it is the current temperature
@@ -52,12 +52,14 @@
                 alice.publicKey
             )
 
+            alert("line 55");
+
             // Sign the transaction with private keys
             const txSigned = BigchainDB.Transaction.signTransaction(tx, alice.privateKey)
-
+            alert("line 59");
             // Send the transaction off to BigchainDB
             let conn = new BigchainDB.Connection(API_PATH)
-
+            alert("line 62");
             conn.postTransactionCommit(txSigned)
                 .then(res => {
                     const elem = document.getElementById('lastTransaction')
@@ -66,6 +68,7 @@
                     alert('Transaction', txSigned.id, 'accepted')
                 })
             // Check console for the transaction's status
+            alert("line 70");
         }
         </script>
     </head>
