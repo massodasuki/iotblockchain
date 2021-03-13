@@ -1,17 +1,22 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
-var Patient = mongoose.model('Patient');
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
 
 
 router.get('/list', function(req, res) {
     // mongoose operations are asynchronous, so you need to wait 
-    Patient.find({}, function(err, data) {
-        // note that data is an array of objects, not a single object!
-        res.render('mongo.ejs', {
-            user : req.user,
-            practices: data
-        });
+    // var MongoClient = require('mongodb').MongoClient;
+    // var url = "mongodb://localhost:27017/";
+
+    MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("bigchain");
+    dbo.collection("assets").find({}).toArray(function(err, result) {
+        if (err) throw err;
+        console.log(result);
+        db.close();
+    });
     });
 });
 
