@@ -64,13 +64,10 @@ router.post('/', function(req, res, next) {
     // Send the transaction off to BigchainDB
     const conn = new driver.Connection(API_PATH)
 
-    var Txn, retrievedTx = null;
     conn.postTransactionCommit(txSigned)
-        .then(retrievedTx => 
-            Txn = retrievedTx.id,
-            console.log('Transaction', retrievedTx.id, 'successfully posted.'))
+    .then(retrievedTx => console.log('Transaction', retrievedTx.id, 'successfully posted.'))
 
-    res.render('benchmark', { txnId: Txn });
+    res.render('benchmark');
 });
 
 module.exports = router;
