@@ -11,6 +11,7 @@ router.post('/', function(req, res, next) {
 
     const driver = require('bigchaindb-driver')
     const base58 = require('bs58');
+    const crypto = require('crypto');
     const { Ed25519Sha256 } = require('crypto-conditions');
 
     // BigchainDB server instance (e.g. https://example.com/api/v1/)
@@ -44,22 +45,22 @@ router.post('/', function(req, res, next) {
     )
 
     // Sign the transaction with private keys
-    const txSigned = driver.Transaction.signTransaction(tx, alice.privateKey)
+    // const txSigned = driver.Transaction.signTransaction(tx, alice.privateKey)
 
     // Or use delegateSignTransaction to provide your own signature function
-    // function signTransaction() {
-    //     // get privateKey from somewhere
-    //     const privateKeyBuffer = Buffer.from(base58.decode(alice.privateKey))
-    //     return function sign(transaction, input, transactionHash) {
-    //         const ed25519Fulfillment = new Ed25519Sha256();
-    //         ed25519Fulfillment.sign(
-    //             Buffer.from(transactionHash, 'hex'),
-    //             privateKeyBuffer
-    //         );
-    //         return ed25519Fulfillment.serializeUri();
-    //     };
-    // }
-    // const txSigned = driver.Transaction.delegateSignTransaction(tx, signTransaction())
+    function signTransaction() {
+        // get privateKey from somewhere
+        const privateKeyBuffer = Buffer.from(base58.decode(alice.privateKey))
+        return function sign(transaction, input, transactionHash) {
+            const ed25519Fulfillment = new Ed25519Sha256();
+            ed25519Fulfillment.sign(
+                Buffer.from(transactionHash, 'hex'),
+                privateKeyBuffer
+            );
+            return ed25519Fulfillment.serializeUri();
+        };
+    }
+    const txSigned = driver.Transaction.delegateSignTransaction(tx, signTransaction())
 
     // Send the transaction off to BigchainDB
     const conn = new driver.Connection(API_PATH)
