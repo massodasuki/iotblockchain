@@ -6,9 +6,9 @@ var bigchain = require('./bigchain');
 
 const targetCPU = 50;
 function startScalableDriver () {
-    cron.schedule("*/5 * * * * *", () => {
+    cron.schedule("*/30 * * * * *", () => {
     // cron.schedule("* 20 * * * *", () => {
-      console.log('Cron Started');
+      // console.log('Cron Started');
 
       var cpuPercent;
       cpu.usage()
@@ -72,7 +72,7 @@ function startScalableDriver () {
 
             }
             else {
-              console.log("CPU load high")
+              // console.log("CPU load high")
             }
 
         }).catch(function(err){
