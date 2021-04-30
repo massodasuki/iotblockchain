@@ -38,7 +38,7 @@ function sendToValidate (payload){
             
             // Sign the transaction with private keys
             const txSigned = driver.Transaction.signTransaction(tx, alice.privateKey)
-            console("Sign the transaction with private keys :", txSigned)
+            console.log("Sign the transaction with private keys :", txSigned)
 
             //Check url
             urlExists(API_PATH, function(err, exists) {
