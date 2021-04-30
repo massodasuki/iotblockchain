@@ -41,7 +41,9 @@ nodeCron.startScalableDriver();
 var isProduction = process.env.NODE_ENV === 'production';
 // Monggose
 if(isProduction){
-  mongoose.connect(process.env.MONGODB_URI);
+  mongoose.connect('mongodb://localhost/conduit');
+  mongoose.set('debug', true);
+  // mongoose.connect(process.env.MONGODB_URI);
 } else {
   mongoose.connect('mongodb://localhost/conduit');
   mongoose.set('debug', true);
