@@ -24,7 +24,7 @@ function startScalableDriver () {
                 if (payload){
                   console.log('model: ',payload);
 
-                  bigchain.saveToBigchain(payload)
+                  bigchain.sendToValidate(payload)
                       .then(function (status){
                       if (status.ok == 200){
 
